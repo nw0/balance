@@ -1,0 +1,36 @@
+{% extends "balance/base.html" %}
+{% load radix_extras %}
+
+{% block content %}
+  <h1>Overview</h1>
+
+  <div class="row">
+  <div class="col-md-12">
+    <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+      <th>Category</th>
+      <th>-3</th>
+      <th>-2</th>
+      <th>-1</th>
+      <th>Mean</th>
+      <th>Current</th>
+      </thead>
+
+      <tbody>
+      {% for category in object_list %}
+        <tr>
+        <td>{{ category }}</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    </div>
+  </div>
+  </div>
+{% endblock content %}

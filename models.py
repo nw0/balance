@@ -33,4 +33,4 @@ class Entry(models.Model):
 
     def __str__(self):
         return "%s %s: [%s] %s %s" % (
-        self.date, self.get_transaction_type_display(), self.category, self.note, self.amount)
+            self.date, self.get_transaction_type_display(), self.category, self.note, self.amount)

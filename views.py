@@ -1,3 +1,7 @@
-from django.shortcuts import render
+from django.views import generic
 
-# Create your views here.
+from balance.models import Category, Entry
+
+
+class CategoryList(generic.ListView):
+    model = Category
