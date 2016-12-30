@@ -1,4 +1,5 @@
 {% extends "balance/base.html" %}
+{% load bootstrap3 %}
 
 {% block title %}Balance: {{ month|date:"F Y" }}{% endblock %}
 
@@ -22,9 +23,23 @@
     </div>
   </h2>
 
-  <ul>
-    {% for object in object_list %}
-      <li>{{ object }}</li>
-    {% endfor %}
-  </ul>
+  <div class="col-md-3">
+    <h3>New Transaction</h3>
+    <form method="post" action="{% url 'balance:entry_create' %}">
+      {% csrf_token %}
+      {% bootstrap_form entry_form %}
+      {% buttons %}
+        <button type="submit" class="btn btn-primary">Add</button>
+      {% endbuttons %}
+    </form>
+  </div>
+
+  <div class="col-md-9">
+    <h3>Summary</h3>
+    <ul>
+      {% for object in object_list %}
+        <li>{{ object }}</li>
+      {% endfor %}
+    </ul>
+  </div>
 {% endblock %}

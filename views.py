@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.urls import reverse_lazy
 from django.views import generic
 
+from balance.forms import EntryForm
 from balance.models import Category, Entry
 
 
@@ -53,3 +54,14 @@ class EntryMonthArchive(generic.dates.MonthArchiveView):
 
     def get_queryset(self):
         return Entry.objects.filter(category__owner=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super(EntryMonthArchive, self).get_context_data(**kwargs)
+        context['entry_form'] = EntryForm
+        return context
+
+
+class EntryCreate(generic.edit.CreateView):
+    model = Entry
+    fields = ['amount', 'date', 'note', 'category']
+    success_url = reverse_lazy('balance:entry')
