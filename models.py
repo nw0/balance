@@ -11,7 +11,7 @@ class Category(models.Model):
     owner = models.ForeignKey(User)
 
     def monthly(self, date):
-        sum = Entry.objects.filter(date__year=date.year, date__month=date.month).aggregate(models.Sum('amount'))['amount__sum']
+        sum = Entry.objects.filter(category=self, date__year=date.year, date__month=date.month).aggregate(models.Sum('amount'))['amount__sum']
         return sum or 0
 
     class Meta:

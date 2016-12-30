@@ -3,7 +3,11 @@
 {% load balance_extras %}
 
 {% block content %}
-  <h1>Overview</h1>
+  <h1>Overview
+    <a class="btn btn-primary" href="{% url 'balance:category_create' %}" role="button">
+      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</a>
+  </h1>
+
 
   <div class="row">
     <div class="col-md-12">
