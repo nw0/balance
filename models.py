@@ -11,7 +11,8 @@ class Category(models.Model):
     owner = models.ForeignKey(User)
 
     def monthly(self, date):
-        sum = Entry.objects.filter(category=self, date__year=date.year, date__month=date.month).aggregate(models.Sum('amount'))['amount__sum']
+        sum = Entry.objects.filter(category=self, date__year=date.year, date__month=date.month).aggregate(
+            models.Sum('amount'))['amount__sum']
         return sum or 0
 
     class Meta:
@@ -23,12 +24,6 @@ class Category(models.Model):
 
 @python_2_unicode_compatible
 class Entry(models.Model):
-    INCOME, EXPENSE = 0, 1
-    TRANSACTION_TYPES = (
-        (INCOME, "Income"),
-        (EXPENSE, "Expenditure"),
-    )
-    transaction_type = models.IntegerField(choices=TRANSACTION_TYPES)
     amount = MoneyField(max_digits=10, decimal_places=2, default_currency="GBP")
     date = models.DateField()
     note = models.CharField(max_length=50)
@@ -38,5 +33,4 @@ class Entry(models.Model):
         verbose_name_plural = "entries"
 
     def __str__(self):
-        return "%s %s: [%s] %s %s" % (
-            self.date, self.get_transaction_type_display(), self.category, self.note, self.amount)
+        return "%s: [%s] %s %s" % (self.date, self.category, self.note, self.amount)
