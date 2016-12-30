@@ -1,0 +1,30 @@
+{% extends "balance/base.html" %}
+
+{% block title %}Balance: {{ month|date:"F Y" }}{% endblock %}
+
+{% block content %}
+  <h1>Transactions</h1>
+  <h2>
+    {{ month|date:"F Y" }}
+    <div class="btn-group" role="group">
+      {% if previous_month %}
+        <a href="{% url "balance:entry_month" previous_month.year previous_month.month %}" role="button"
+           class="btn btn-default">
+          &laquo; {{ previous_month|date:"N" }}
+        </a>
+      {% endif %}
+      {% if next_month %}
+        <a href="{% url "balance:entry_month" next_month.year next_month.month %}" role="button"
+           class="btn btn-default">
+          {{ next_month|date:"N" }} &raquo;
+        </a>
+      {% endif %}
+    </div>
+  </h2>
+
+  <ul>
+    {% for object in object_list %}
+      <li>{{ object }}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

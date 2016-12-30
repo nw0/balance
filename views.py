@@ -1,11 +1,12 @@
 import datetime
 
 from django.contrib import messages
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.urls import reverse_lazy
 from django.views import generic
 
-from balance.models import Category
+from balance.models import Category, Entry
 
 
 def months(start, times):
@@ -16,6 +17,11 @@ def months(start, times):
         yield date
         it -= 1
         date -= datetime.timedelta(days=1)
+
+
+def entry_redirect(request):
+    return HttpResponseRedirect(reverse('balance:entry_month', kwargs={'year': datetime.date.today().strftime("%Y"),
+                                                                       'month': datetime.date.today().strftime("%m")}))
 
 
 class CategoryList(generic.ListView):
@@ -36,6 +42,14 @@ class CategoryCreate(generic.edit.CreateView):
         if "_add_another" in self.request.POST:
             self.success_url = reverse('balance:category_create')
         messages.success(self.request, "Created %s" %
-            (form.instance,))
+                         (form.instance,))
         form.instance.owner = self.request.user
         return super(CategoryCreate, self).form_valid(form)
+
+
+class EntryMonthArchive(generic.dates.MonthArchiveView):
+    date_field = "date"
+    allow_empty, allow_future = False, True
+
+    def get_queryset(self):
+        return Entry.objects.filter(category__owner=self.request.user)
