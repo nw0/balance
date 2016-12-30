@@ -47,13 +47,16 @@
         </thead>
 
         <tbody>
-        {% for entry in object_list %}
-          <tr>
-          <td>{{ entry.date|date:"dS" }}</td>
-          <td>{{ entry.category }}</td>
-          <td>{{ entry.amount|accountform }}</td>
-          <td>{{ entry.note }}</td>
-          </tr>
+        {% regroup object_list by category as ent_list %}
+        {% for cat in ent_list %}
+          {% for entry in cat.list|dictsort:"date" %}
+            <tr>
+              <td>{{ entry.date|date:"dS" }}</td>
+              <td>{{ entry.category }}</td>
+              <td>{{ entry.amount|accountform }}</td>
+              <td>{{ entry.note }}</td>
+            </tr>
+          {% endfor %}
         {% endfor %}
         </tbody>
       </table>
