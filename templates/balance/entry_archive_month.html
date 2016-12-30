@@ -1,5 +1,6 @@
 {% extends "balance/base.html" %}
 {% load bootstrap3 %}
+{% load balance_extras %}
 
 {% block title %}Balance: {{ month|date:"F Y" }}{% endblock %}
 
@@ -36,10 +37,26 @@
 
   <div class="col-md-9">
     <h3>Summary</h3>
-    <ul>
-      {% for object in object_list %}
-        <li>{{ object }}</li>
-      {% endfor %}
-    </ul>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+        <th>Date</th>
+        <th>Category</th>
+        <th>Amount</th>
+        <th>Remarks</th>
+        </thead>
+
+        <tbody>
+        {% for entry in object_list %}
+          <tr>
+          <td>{{ entry.date|date:"dS" }}</td>
+          <td>{{ entry.category }}</td>
+          <td>{{ entry.amount|accountform }}</td>
+          <td>{{ entry.note }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 {% endblock %}
