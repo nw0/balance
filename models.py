@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 
@@ -7,6 +8,7 @@ from djmoney.models.fields import MoneyField
 @python_2_unicode_compatible
 class Category(models.Model):
     name = models.CharField(max_length=30)
+    owner = models.ForeignKey(User)
 
     class Meta:
         verbose_name_plural = "categories"
