@@ -50,7 +50,7 @@ class CategoryCreate(generic.edit.CreateView):
 
 class EntryMonthArchive(generic.dates.MonthArchiveView):
     date_field = "date"
-    allow_empty, allow_future = False, True
+    allow_empty, allow_future = True, True
 
     def get_queryset(self):
         return Entry.objects.filter(category__owner=self.request.user)
