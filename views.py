@@ -53,7 +53,7 @@ class EntryMonthArchive(generic.dates.MonthArchiveView):
     allow_empty, allow_future = True, True
 
     def get_queryset(self):
-        return Entry.objects.filter(category__owner=self.request.user)
+        return Entry.objects.filter(category__owner=self.request.user).order_by('category')
 
     def get_context_data(self, **kwargs):
         context = super(EntryMonthArchive, self).get_context_data(**kwargs)
