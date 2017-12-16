@@ -1,0 +1,14 @@
+{% extends "balance/base.html" %}
+{% load bootstrap4 %}
+
+{% block content %}
+<h1>New account</h1>
+
+<form method="post" action="{% url 'balance:account_create' %}">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons %}
+    <button type="submit" class="btn btn-primary">Create</button>
+    {% endbuttons %}
+</form>
+{% endblock content %}
