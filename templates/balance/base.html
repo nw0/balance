@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+{% load bootstrap4 %}
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Balance</title>
+    {% bootstrap_css %}
+</head>
+<body>
+<div class="container" role="main">
+    <div class="row">
+        {% block content %}
+        {% endblock content %}
+    </div>
+</div>
+</body>
+</html>
