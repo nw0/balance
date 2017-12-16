@@ -9,6 +9,13 @@ class AccountList(generic.ListView):
         return Account.objects.filter(owner=self.request.user)
 
 
+class AccountDetail(generic.DetailView):
+    model = Account
+
+    def get_queryset(self):
+        return Account.objects.filter(owner=self.request.user)
+
+
 class AccountCreate(generic.edit.CreateView):
     model = Account
     fields = ['name', 'owned']
