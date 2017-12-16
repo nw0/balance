@@ -4,14 +4,27 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Balance</title>
     {% bootstrap_css %}
+
+    <style>
+        body {
+        padding-top: 3.5rem;
+        }
+    </style>
 </head>
+
 <body>
-<div class="container" role="main">
+<header>
+    {% include 'balance/nav.html' %}
+</header>
+<div class="container">
     <div class="row">
-        {% block content %}
-        {% endblock content %}
+        <main role="main" class="col-sm-12 ml-sm-auto col-md-12 pt-3">
+            {% block content %}
+            {% endblock content %}
+        </main>
     </div>
 </div>
 </body>
