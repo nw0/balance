@@ -1,7 +1,7 @@
 from django.urls import reverse_lazy
 from django.views import generic
 
-from .models import Account
+from .models import Account, TransactionCategory
 
 
 class AccountList(generic.ListView):
@@ -17,3 +17,13 @@ class AccountCreate(generic.edit.CreateView):
     def form_valid(self, form):
         form.instance.owner = self.request.user
         return super(AccountCreate, self).form_valid(form)
+
+
+class CategoryCreate(generic.edit.CreateView):
+    model = TransactionCategory
+    fields = ['name']
+    success_url = reverse_lazy('balance:account_list')
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super(CategoryCreate, self).form_valid(form)
