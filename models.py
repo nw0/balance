@@ -4,7 +4,7 @@ from djmoney.models.fields import MoneyField
 
 
 class Account(models.Model):
-    owner = models.ForeignKey(User)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=30)
     owned = models.BooleanField(default=True)
 
@@ -13,8 +13,8 @@ class Account(models.Model):
 
 
 class AccountBalance(models.Model):
-    owner = models.ForeignKey(User)
-    account = models.ForeignKey(Account)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
     balance = MoneyField(max_digits=16, decimal_places=2, default_currency="GBP")
     date = models.DateField()
 
@@ -26,7 +26,7 @@ class AccountBalance(models.Model):
 
 
 class TransactionCategory(models.Model):
-    owner = models.ForeignKey(User)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=30)
 
     def __str__(self):
@@ -38,11 +38,11 @@ class TransactionCategory(models.Model):
 
 
 class Transaction(models.Model):
-    owner = models.ForeignKey(User)
-    payee = models.ForeignKey(Account, blank=True)
-    payer = models.ForeignKey(Account, blank=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    payee = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="payee", blank=True)
+    payer = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="payer",  blank=True)
     date = models.DateField()
-    category = models.ForeignKey(TransactionCategory)
+    category = models.ForeignKey(TransactionCategory, on_delete=models.CASCADE)
     remark = models.CharField(max_length=50)
     amount = MoneyField(max_digits=16, decimal_places=2, default_currency="GBP")
 
