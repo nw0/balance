@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Account, AccountBalance, TransactionCategory, Transaction
+
+admin.site.register(Account)
+admin.site.register(AccountBalance)
+admin.site.register(TransactionCategory)
+admin.site.register(Transaction)
