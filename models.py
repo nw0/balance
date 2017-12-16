@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Q
 from djmoney.models.fields import MoneyField
 
 
@@ -7,6 +8,14 @@ class Account(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=30)
     owned = models.BooleanField(default=True)
+
+    @property
+    def last_balance(self):
+        return AccountBalance.objects.filter(account=self).latest()
+
+    @property
+    def recent_transactions(self):
+        return Transaction.objects.filter(Q(payee=self) | Q(payer=self)).order_by("-date")
 
     def __str__(self):
         return self.name
@@ -22,6 +31,7 @@ class AccountBalance(models.Model):
         return self.balance
 
     class Meta:
+        get_latest_by = "date"
         verbose_name = "balance record"
 
 
@@ -48,3 +58,6 @@ class Transaction(models.Model):
 
     def __str__(self):
         return "%s (%s: %s)" % (self.amount, self.category, self.remark)
+
+    class Meta:
+        get_latest_by = "date"
