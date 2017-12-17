@@ -18,8 +18,6 @@ class AccountList(generic.ListView):
 
 
 class AccountDetail(generic.DetailView):
-    model = Account
-
     def get_queryset(self):
         return Account.objects.filter(owner=self.request.user)
 
@@ -56,6 +54,11 @@ class BalanceUpdate(generic.edit.CreateView):
 
 
 class CategoryList(generic.ListView):
+    def get_queryset(self):
+        return TransactionCategory.objects.filter(owner=self.request.user)
+
+
+class CategoryDetail(generic.DetailView):
     def get_queryset(self):
         return TransactionCategory.objects.filter(owner=self.request.user)
 

@@ -1,0 +1,9 @@
+{% extends "balance/base.html" %}
+
+{% block content %}
+<h1>{{ object }}</h1>
+
+<h2>Transactions</h2>
+{% include "balance/transaction_table.html" with transaction_list=object.transaction_set.all %}
+
+{% endblock %}
