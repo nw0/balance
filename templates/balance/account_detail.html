@@ -14,31 +14,5 @@
 
 <h2>Transactions</h2>
 
-<div class="table-responsive">
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Date</th>
-            <th>Category</th>
-            <th>From/To</th>
-            <th>Amount</th>
-            <th>Remark</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        {% for transaction in account.recent_transactions %}
-        <tr>
-            <td>{{ transaction.date }}</td>
-            <td>{{ transaction.category }}</td>
-            {% with transaction|other_account:account as other %}
-            <td><a href="{% url 'balance:account_detail' other.pk %}">{{ other }}</a></td>
-            {% endwith %}
-            <td>{{ transaction|net_amount:account }}</td>
-            <td>{{ transaction.remark }}</td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+{% include "balance/transaction_table.html" with transaction_list=account.recent_transactions account=account %}
 {% endblock content %}
