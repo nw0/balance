@@ -10,4 +10,4 @@ def other_account(transaction, account):
 
 @register.filter()
 def net_amount(transaction, account):
-    return transaction.amount * (-1 if account == transaction.payer else 1)
+    return transaction.net_amount(account)

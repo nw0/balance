@@ -14,6 +14,15 @@ class Account(models.Model):
         return AccountBalance.objects.filter(account=self).latest()
 
     @property
+    def balance_estimate(self):
+        last = self.last_balance
+        balance = last.balance
+
+        for transaction in Transaction.objects.filter(date__gt=last.date):
+            balance += transaction.net_amount(self)
+        return balance
+
+    @property
     def recent_transactions(self):
         return Transaction.objects.filter(Q(payee=self) | Q(payer=self)).order_by("-date")
 
@@ -54,6 +63,9 @@ class Transaction(models.Model):
     category = models.ForeignKey(TransactionCategory, on_delete=models.CASCADE)
     remark = models.CharField(max_length=50)
     amount = MoneyField(max_digits=16, decimal_places=2, default_currency="GBP")
+
+    def net_amount(self, account):
+        return self.amount * (-1 if account == self.payer else 1)
 
     def __str__(self):
         return "%s (%s: %s)" % (self.amount, self.category, self.remark)

@@ -7,16 +7,9 @@
     </small>
 </h1>
 
-<ul>
-    {% for account in owned_accounts %}
-    <li>{{ account }}</li>
-    {% endfor %}
-</ul>
+{% include "balance/account_table.html" with account_list=owned_accounts %}
 
 <h2>Other accounts</h2>
-<ul>
-    {% for account in other_accounts %}
-    <li>{{ account }}</li>
-    {% endfor %}
-</ul>
+{% include "balance/account_table.html" with account_list=other_accounts %}
+
 {% endblock content %}
