@@ -22,7 +22,6 @@ class Account(models.Model):
 
 
 class AccountBalance(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     balance = MoneyField(max_digits=16, decimal_places=2, default_currency="GBP")
     date = models.DateField()
