@@ -1,0 +1,14 @@
+{% extends "balance/base.html" %}
+{% load bootstrap4 %}
+
+{% block content %}
+<h1>Update Balance</h1>
+
+<form method="post" action="{% url 'balance:balance_update' %}">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons %}
+    <button type="submit" class="btn btn-primary">Update</button>
+    {% endbuttons %}
+</form>
+{% endblock content %}

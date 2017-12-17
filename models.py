@@ -27,7 +27,7 @@ class AccountBalance(models.Model):
     date = models.DateField()
 
     def __str__(self):
-        return self.balance
+        return str(self.balance)
 
     class Meta:
         get_latest_by = "date"
