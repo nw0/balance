@@ -1,4 +1,5 @@
 {% extends "balance/base.html" %}
+{% load bootstrap4 %}
 {% load balance_extras %}
 
 {% block content %}
@@ -11,6 +12,14 @@
 <p>No balance records</p>
 {% endif %}
 {% endwith %}
+
+<form class="form-inline" method="post" action="{% url 'balance:balance_update' %}">
+    {% csrf_token %}
+    {% bootstrap_form balance_form layout='inline' %}
+    {% buttons %}
+    <button type="submit" class="btn btn-primary">Update</button>
+    {% endbuttons %}
+</form>
 
 <h2>Transactions</h2>
 

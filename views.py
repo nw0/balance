@@ -21,6 +21,12 @@ class AccountDetail(generic.DetailView):
     def get_queryset(self):
         return Account.objects.filter(owner=self.request.user)
 
+    def get_context_data(self, **kwargs):
+        context = super(AccountDetail, self).get_context_data(**kwargs)
+
+        context['balance_form'] = BalanceForm(user=self.request.user, hide_account=True, initial={'account': self.object})
+        return context
+
 
 class AccountCreate(generic.edit.CreateView):
     model = Account
@@ -36,9 +42,6 @@ class BalanceUpdate(generic.edit.CreateView):
     model = AccountBalance
     form_class = BalanceForm
 
-    # FIXME: redirect to appropriate account detail page
-    success_url = reverse_lazy('balance:account_list')
-
     def get_form_kwargs(self):
         kwargs = super(BalanceUpdate, self).get_form_kwargs()
 
@@ -51,6 +54,9 @@ class BalanceUpdate(generic.edit.CreateView):
             record.balance = form.instance.balance
             form.instance = record
         return super(BalanceUpdate, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('balance:account_detail', args=[self.object.account.pk])
 
 
 class CategoryList(generic.ListView):

@@ -6,9 +6,12 @@ from .models import Account, Transaction, TransactionCategory, AccountBalance
 class BalanceForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
+        hide_account = kwargs.pop('hide_account', False)
         super(BalanceForm, self).__init__(*args, **kwargs)
 
         self.fields['account'].queryset = Account.objects.filter(owner=user)
+        if hide_account:
+            self.fields['account'].widget = forms.HiddenInput()
 
     class Meta:
         model = AccountBalance
