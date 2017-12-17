@@ -9,6 +9,13 @@ class AccountList(generic.ListView):
     def get_queryset(self):
         return Account.objects.filter(owner=self.request.user)
 
+    def get_context_data(self, **kwargs):
+        context = super(AccountList, self).get_context_data(**kwargs)
+
+        context['owned_accounts'] = context['object_list'].filter(owned=True)
+        context['other_accounts'] = context['object_list'].filter(owned=False)
+        return context
+
 
 class AccountDetail(generic.DetailView):
     model = Account

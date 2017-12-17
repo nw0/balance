@@ -30,9 +30,11 @@
             <hr>
             <ul class="nav nav-pills flex-column">
                 {% for account in request.user.account_set.all %}
+                {% if account.owned %}
                 <li class="nav-item">
                     <a href="{% url 'balance:account_detail' account.pk %}">{{ account }}</a>
                 </li>
+                {% endif %}
                 {% endfor %}
             </ul>
         </nav>

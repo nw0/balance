@@ -8,8 +8,15 @@
 </h1>
 
 <ul>
-    {% for object in object_list %}
-    <li>{{ object }}</li>
+    {% for account in owned_accounts %}
+    <li>{{ account }}</li>
+    {% endfor %}
+</ul>
+
+<h2>Other accounts</h2>
+<ul>
+    {% for account in other_accounts %}
+    <li>{{ account }}</li>
     {% endfor %}
 </ul>
 {% endblock content %}
