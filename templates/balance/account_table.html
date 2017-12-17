@@ -10,7 +10,7 @@
         <tbody>
         {% for account in account_list %}
         <tr>
-            <td>{{ account }}</td>
+            <td><a href="{% url 'balance:account_detail' account.pk %}">{{ account }}</a></td>
             <td>{{ account.balance_estimate }}</td>
         </tr>
         {% endfor %}

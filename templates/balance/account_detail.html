@@ -31,7 +31,9 @@
         <tr>
             <td>{{ transaction.date }}</td>
             <td>{{ transaction.category }}</td>
-            <td>{{ transaction|other_account:account }}</td>
+            {% with transaction|other_account:account as other %}
+            <td><a href="{% url 'balance:account_detail' other.pk %}">{{ other }}</a></td>
+            {% endwith %}
             <td>{{ transaction|net_amount:account }}</td>
             <td>{{ transaction.remark }}</td>
         </tr>
