@@ -18,13 +18,17 @@ class Account(models.Model):
         last = self.last_balance
         balance = last.balance
 
-        for transaction in Transaction.objects.filter(date__gt=last.date):
+        for transaction in self.related_transactions.filter(date__gt=last.date):
             balance += transaction.net_amount(self)
         return balance
 
     @property
     def recent_transactions(self):
-        return Transaction.objects.filter(Q(payee=self) | Q(payer=self)).order_by("-date")
+        return self.related_transactions.order_by("-date")
+
+    @property
+    def related_transactions(self):
+        return Transaction.objects.filter(Q(payee=self) | Q(payer=self))
 
     def __str__(self):
         return self.name
