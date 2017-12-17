@@ -1,0 +1,16 @@
+{% extends "balance/base.html" %}
+
+{% block content %}
+<h1>
+    Categories
+    <small>
+        <a class="btn btn-md btn-success" href="{% url 'balance:category_create' %}" role="button">Add</a>
+    </small>
+</h1>
+
+<ul>
+    {% for object in object_list %}
+    <li>{{ object }}</li>
+    {% endfor %}
+</ul>
+{% endblock content %}

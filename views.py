@@ -48,10 +48,15 @@ class BalanceUpdate(generic.edit.CreateView):
         return super(BalanceUpdate, self).form_valid(form)
 
 
+class CategoryList(generic.ListView):
+    def get_queryset(self):
+        return TransactionCategory.objects.filter(owner=self.request.user)
+
+
 class CategoryCreate(generic.edit.CreateView):
     model = TransactionCategory
     fields = ['name']
-    success_url = reverse_lazy('balance:account_list')
+    success_url = reverse_lazy('balance:category_list')
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
