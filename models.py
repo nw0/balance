@@ -61,7 +61,7 @@ class Transaction(models.Model):
     payer = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="payer",  blank=True)
     date = models.DateField()
     category = models.ForeignKey(TransactionCategory, on_delete=models.CASCADE)
-    remark = models.CharField(max_length=50)
+    remark = models.CharField(max_length=50, blank=True)
     amount = MoneyField(max_digits=16, decimal_places=2, default_currency="GBP")
 
     def net_amount(self, account):
