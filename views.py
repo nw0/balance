@@ -1,6 +1,6 @@
 from datetime import date
 
-from django.db.models import Sum, Q
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.views import generic
@@ -78,9 +78,10 @@ class CategoryMonth(generic.dates.MonthArchiveView):
     allow_empty = True
     allow_future = True
     date_field = "date"
+    template_name = 'balance/category_archive_month.html'
 
     def dispatch(self, request, *args, **kwargs):
-        self.category = TransactionCategory.objects.get(pk=kwargs.get('category_pk', None))
+        self.category = TransactionCategory.objects.get(pk=kwargs.get('category_pk', None), owner=request.user)
         return super(CategoryMonth, self).dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
