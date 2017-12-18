@@ -1,5 +1,6 @@
 {% load balance_extras %}
 
+{% if transaction_list %}
 <div class="table-responsive">
     <table class="table table-striped">
         <thead>
@@ -18,6 +19,13 @@
         </thead>
 
         <tbody>
+        {% if total %}
+        <tr class="table-primary">
+            <td colspan="4"><strong>Total</strong></td>
+            <td><strong>{{ total }}</strong></td>
+            <td></td>
+        </tr>
+        {% endif %}
         {% for transaction in transaction_list %}
         {% if transaction.internal %}<tr class="text-muted">{% else %}<tr>{% endif %}
             <td>{{ transaction.date }}</td>
@@ -30,7 +38,7 @@
             {% else %}
             <td><a href="{% url 'balance:account_detail' transaction.payer.pk %}">{{ transaction.payer }}</a></td>
             <td><a href="{% url 'balance:account_detail' transaction.payee.pk %}">{{ transaction.payee }}</a></td>
-            <td>{{ transaction.amount }}</td>
+            <td>{{ transaction.internal_change }}</td>
             {% endif %}
             <td>{{ transaction.remark }}</td>
         </tr>
@@ -38,3 +46,6 @@
         </tbody>
     </table>
 </div>
+{% else %}
+<p>No transactions</p>
+{% endif %}

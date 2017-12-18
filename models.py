@@ -72,6 +72,10 @@ class Transaction(models.Model):
     def internal(self):
         return self.payee.owned and self.payer.owned
 
+    @property
+    def internal_change(self):
+        return self.amount * (-1 if self.payer.owned and not self.payee.owned else 1)
+
     def net_amount(self, account):
         return self.amount * (-1 if account == self.payer else 1)
 

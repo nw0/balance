@@ -1,4 +1,6 @@
 from datetime import date
+
+from django.db.models import Sum, Q
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.views import generic
@@ -87,6 +89,10 @@ class CategoryMonth(generic.dates.MonthArchiveView):
     def get_context_data(self, *args, **kwargs):
         context = super(CategoryMonth, self).get_context_data(*args, **kwargs)
         context['category'] = self.category
+        context['total'] = 0
+        for t in self.object_list:
+            if not t.internal:
+                context['total'] += t.internal_change
         return context
 
 
