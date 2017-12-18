@@ -1,3 +1,4 @@
+from datetime import date
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Q
@@ -51,6 +52,12 @@ class TransactionCategory(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=30)
 
+    def month_change(self):
+        change = 0
+        for transaction in Transaction.objects.filter(category=self, date__gte=date.today().replace(day=1)):
+            change += transaction.net_change
+        return change
+
     def __str__(self):
         return self.name
 
@@ -75,6 +82,15 @@ class Transaction(models.Model):
     @property
     def internal_change(self):
         return self.amount * (-1 if self.payer.owned and not self.payee.owned else 1)
+
+    @property
+    def net_change(self):
+        if self.payer.owned and not self.payee.owned:
+            return -1 * self.amount
+        elif not self.payer.owned and self.payee.owned:
+            return self.amount
+        else:
+            return 0
 
     def net_amount(self, account):
         return self.amount * (-1 if account == self.payer else 1)

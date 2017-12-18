@@ -8,9 +8,24 @@
     </small>
 </h1>
 
-<ul>
-    {% for object in object_list %}
-    <li><a href="{% url 'balance:category_detail' object.pk %}">{{ object }}</a></li>
-    {% endfor %}
-</ul>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Category</th>
+            <th>This month</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for category in object_list %}
+        <tr>
+            <td><a href="{% url 'balance:category_detail' category.pk %}">{{ category }}</a></td>
+            <td>{{ category.month_change|default:"-" }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
 {% endblock content %}
