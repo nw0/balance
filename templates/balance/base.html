@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 {% load bootstrap4 %}
 
 <html lang="en">
@@ -8,23 +9,19 @@
     <title>Balance</title>
     {% bootstrap_css %}
 
-    <style>
-        body {
-        padding-top: 3.5rem;
-        }
-    </style>
+    <link href="{% static 'balance/style.css' %}" rel="stylesheet">
 </head>
 
 <body>
 <header>
     {% include 'balance/nav.html' %}
 </header>
-<div class="container">
+<div class="container-fluid">
     <div class="row">
         <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
             <ul class="nav nav-pills flex-column">
                 <li class="nav-item">
-                    <a href="{% url 'balance:account_list' %}">Accounts Overview</a>
+                    <a class="nav-link" href="{% url 'balance:account_list' %}">Accounts Overview</a>
                 </li>
             </ul>
             <hr>
@@ -32,7 +29,7 @@
                 {% for account in request.user.account_set.all %}
                 {% if account.owned %}
                 <li class="nav-item">
-                    <a href="{% url 'balance:account_detail' account.pk %}">{{ account }}</a>
+                    <a class="nav-link" href="{% url 'balance:account_detail' account.pk %}">{{ account }}</a>
                 </li>
                 {% endif %}
                 {% endfor %}
