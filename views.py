@@ -1,4 +1,6 @@
-from django.urls import reverse_lazy
+from datetime import date
+from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy, reverse
 from django.views import generic
 
 from .forms import TransactionForm, BalanceForm
@@ -64,9 +66,10 @@ class CategoryList(generic.ListView):
         return TransactionCategory.objects.filter(owner=self.request.user)
 
 
-class CategoryDetail(generic.DetailView):
-    def get_queryset(self):
-        return TransactionCategory.objects.filter(owner=self.request.user)
+def category_redirect(request, pk):
+    return HttpResponseRedirect(reverse('balance:category_month', kwargs={'category_pk': pk,
+                                                                          'year': date.today().strftime("%Y"),
+                                                                          'month': date.today().strftime("%m")}))
 
 
 class CategoryMonth(generic.dates.MonthArchiveView):
