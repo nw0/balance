@@ -21,14 +21,33 @@ class AccountList(generic.ListView):
         return context
 
 
-class AccountDetail(generic.DetailView):
+def account_redirect(request, pk):
+    return HttpResponseRedirect(reverse('balance:account_month', kwargs={'account_pk': pk,
+                                                                         'year': date.today().strftime("%Y"),
+                                                                         'month': date.today().strftime("%m")}))
+
+
+class AccountMonth(generic.dates.MonthArchiveView):
+    allow_empty = True
+    allow_future = True
+    date_field = "date"
+    template_name = 'balance/account_archive_month.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.account = Account.objects.get(pk=kwargs.get('account_pk', None), owner=request.user)
+        return super(AccountMonth, self).dispatch(request, *args, **kwargs)
+
     def get_queryset(self):
-        return Account.objects.filter(owner=self.request.user)
+        return Transaction.objects.filter(category__owner=self.request.user).filter(Q(payee=self.account) | Q(payer=self.account))
 
-    def get_context_data(self, **kwargs):
-        context = super(AccountDetail, self).get_context_data(**kwargs)
-
-        context['balance_form'] = BalanceForm(user=self.request.user, hide_account=True, initial={'account': self.object})
+    def get_context_data(self, *args, **kwargs):
+        context = super(AccountMonth, self).get_context_data(*args, **kwargs)
+        context['balance_form'] = BalanceForm(user=self.request.user, hide_account=True, initial={'account': self.account})
+        context['account'] = self.account
+        context['total'] = 0
+        for t in self.object_list:
+            if not t.internal:
+                context['total'] += t.net_amount(self.account)
         return context
 
 

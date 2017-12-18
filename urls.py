@@ -6,7 +6,8 @@ app_name = 'balance'
 urlpatterns = [
     path('', views.AccountList.as_view(), name='account_list'),
     path('account/create/', views.AccountCreate.as_view(), name='account_create'),
-    path('account/<int:pk>/', views.AccountDetail.as_view(), name='account_detail'),
+    path('account/<int:pk>/', views.account_redirect, name='account_detail'),
+    path('account/<int:account_pk>/<int:year>/<int:month>/', views.AccountMonth.as_view(month_format='%m'), name='account_month'),
     path('balance/update/', views.BalanceUpdate.as_view(), name='balance_update'),
     path('category/', views.CategoryList.as_view(), name='category_list'),
     path('category/<int:pk>/', views.category_redirect, name='category_detail'),
