@@ -69,6 +69,24 @@ class CategoryDetail(generic.DetailView):
         return TransactionCategory.objects.filter(owner=self.request.user)
 
 
+class CategoryMonth(generic.dates.MonthArchiveView):
+    allow_empty = True
+    allow_future = True
+    date_field = "date"
+
+    def dispatch(self, request, *args, **kwargs):
+        self.category = TransactionCategory.objects.get(pk=kwargs.get('category_pk', None))
+        return super(CategoryMonth, self).dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return Transaction.objects.filter(category__owner=self.request.user, category=self.category)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(CategoryMonth, self).get_context_data(*args, **kwargs)
+        context['category'] = self.category
+        return context
+
+
 class CategoryCreate(generic.edit.CreateView):
     model = TransactionCategory
     fields = ['name']

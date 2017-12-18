@@ -10,7 +10,7 @@
 
 <ul>
     {% for object in object_list %}
-    <li>{{ object }}</li>
+    <li><a href="{% url 'balance:category_detail' object.pk %}">{{ object }}</a></li>
     {% endfor %}
 </ul>
 {% endblock content %}
