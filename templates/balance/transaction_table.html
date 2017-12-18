@@ -7,22 +7,18 @@
         <tr>
             <th>Date</th>
             <th>Category</th>
-            {% if account %}
-            <th>From/To</th>
-            {% else %}
             <th>From</th>
             <th>To</th>
-            {% endif %}
             <th>Amount</th>
             <th>Remark</th>
         </tr>
         </thead>
 
         <tbody>
-        {% if total %}
+        {% if transaction_list %}
         <tr class="table-primary">
             <td colspan="4"><strong>Total</strong></td>
-            <td><strong>{{ total }}</strong></td>
+            <td><strong>{{ total|default:"-" }}</strong></td>
             <td></td>
         </tr>
         {% endif %}
@@ -30,14 +26,11 @@
         {% if transaction.internal %}<tr class="text-muted">{% else %}<tr>{% endif %}
             <td>{{ transaction.date }}</td>
             <td><a href="{% url 'balance:category_detail' transaction.category.pk %}">{{ transaction.category }}</a></td>
-            {% if account %}
-            {% with transaction|other_account:account as other %}
-            <td><a href="{% url 'balance:account_detail' other.pk %}">{{ other }}</a></td>
-            <td>{{ transaction|net_amount:account }}</td>
-            {% endwith %}
-            {% else %}
             <td><a href="{% url 'balance:account_detail' transaction.payer.pk %}">{{ transaction.payer }}</a></td>
             <td><a href="{% url 'balance:account_detail' transaction.payee.pk %}">{{ transaction.payee }}</a></td>
+            {% if account %}
+            <td>{{ transaction|net_amount:account }}</td>
+            {% else %}
             <td>{{ transaction.internal_change }}</td>
             {% endif %}
             <td>{{ transaction.remark }}</td>
