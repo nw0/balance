@@ -68,6 +68,10 @@ class Transaction(models.Model):
     remark = models.CharField(max_length=50, blank=True)
     amount = MoneyField(max_digits=16, decimal_places=2, default_currency="GBP")
 
+    @property
+    def internal(self):
+        return self.payee.owned and self.payer.owned
+
     def net_amount(self, account):
         return self.amount * (-1 if account == self.payer else 1)
 
