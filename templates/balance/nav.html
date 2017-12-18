@@ -1,16 +1,15 @@
+{% load balance_extras %}
+
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <a class="navbar-brand" href="{% url 'balance:account_list' %}">Balance</a>
 
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'balance:category_list' %}">Categories</a>
+                <a class="nav-link {% nav_active request 'balance:category_list' %}" href="{% url 'balance:category_list' %}">Categories</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'balance:transaction_create' %}">New Transaction</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'balance:balance_update' %}">Update Balance</a>
+                <a class="nav-link {% nav_active request 'balance:transaction_create' %}" href="{% url 'balance:transaction_create' %}">New Transaction</a>
             </li>
         </ul>
     </div>

@@ -4,7 +4,7 @@ from . import views
 
 app_name = 'balance'
 urlpatterns = [
-    path('', views.AccountList.as_view(), name='account_list'),
+    path('dashboard/', views.AccountList.as_view(), name='account_list'),
     path('account/create/', views.AccountCreate.as_view(), name='account_create'),
     path('account/<int:pk>/', views.account_redirect, name='account_detail'),
     path('account/<int:account_pk>/<int:year>/<int:month>/', views.AccountMonth.as_view(month_format='%m'), name='account_month'),
