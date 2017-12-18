@@ -82,7 +82,7 @@ class CategoryCreate(generic.edit.CreateView):
 class TransactionCreate(generic.edit.CreateView):
     model = Transaction
     form_class = TransactionForm
-    success_url = reverse_lazy('balance:account_list')
+    success_url = reverse_lazy('balance:transaction_create')
 
     def get_form_kwargs(self):
         kwargs = super(TransactionCreate, self).get_form_kwargs()
