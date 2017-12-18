@@ -1,7 +1,24 @@
 {% extends "balance/base.html" %}
+{% load bootstrap4 %}
 
 {% block content %}
 <h1>{{ account }}</h1>
+
+{% with account.last_balance as balance %}
+{% if balance %}
+<h2>{{ balance }} <small>on {{ balance.date }}</small></h2>
+{% else %}
+<p>No balance records</p>
+{% endif %}
+{% endwith %}
+
+<form class="form-inline" method="post" action="{% url 'balance:balance_update' %}">
+    {% csrf_token %}
+    {% bootstrap_form balance_form layout='inline' %}
+    {% buttons %}
+    <button type="submit" class="btn btn-primary">Update</button>
+    {% endbuttons %}
+</form>
 
 <h2>Transactions <small>{{ month|date:"N Y" }}</small></h2>
 <p><a href="{% url 'balance:account_month' account.pk previous_month.year previous_month.month %}">Previous</a>

@@ -46,8 +46,7 @@ class AccountMonth(generic.dates.MonthArchiveView):
         context['account'] = self.account
         context['total'] = 0
         for t in self.object_list:
-            if not t.internal:
-                context['total'] += t.net_amount(self.account)
+            context['total'] += t.net_amount(self.account)
         return context
 
 
