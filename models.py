@@ -53,10 +53,13 @@ class TransactionCategory(models.Model):
     name = models.CharField(max_length=30)
 
     def month_change(self):
-        change = 0
+        changes = {}
         for transaction in Transaction.objects.filter(category=self, date__gte=date.today().replace(day=1)):
-            change += transaction.net_change
-        return change
+            currency = transaction.amount.currency
+            if currency not in changes:
+                changes[currency] = 0
+            changes[currency] += transaction.net_change
+        return changes
 
     def __str__(self):
         return self.name

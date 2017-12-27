@@ -44,9 +44,13 @@ class AccountMonth(generic.dates.MonthArchiveView):
         context = super(AccountMonth, self).get_context_data(*args, **kwargs)
         context['balance_form'] = BalanceForm(user=self.request.user, hide_account=True, initial={'account': self.account})
         context['account'] = self.account
-        context['total'] = 0
+        context['total'] = {}
         for t in self.object_list:
-            context['total'] += t.net_amount(self.account)
+            change = t.net_amount(self.account)
+            if change:
+                if change.currency not in context['total']:
+                    context['total'][change.currency] = 0
+                context['total'][change.currency] += change
         return context
 
 
@@ -108,10 +112,13 @@ class CategoryMonth(generic.dates.MonthArchiveView):
     def get_context_data(self, *args, **kwargs):
         context = super(CategoryMonth, self).get_context_data(*args, **kwargs)
         context['category'] = self.category
-        context['total'] = 0
+        context['total'] = {}
         for t in self.object_list:
-            if not t.internal:
-                context['total'] += t.internal_change
+            change = t.net_change
+            if change:
+                if change.currency not in context['total']:
+                    context['total'][change.currency] = 0
+                context['total'][change.currency] += change
         return context
 
 

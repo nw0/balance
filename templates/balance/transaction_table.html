@@ -18,7 +18,7 @@
         {% if transaction_list %}
         <tr class="table-primary">
             <td colspan="4"><strong>Total</strong></td>
-            <td><strong>{{ total|default:"-" }}</strong></td>
+            <td><strong>{% for sum in total.values %}{{ sum }} {% empty %}-{% endfor %}</strong></td>
             <td></td>
         </tr>
         {% endif %}

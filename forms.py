@@ -19,6 +19,8 @@ class BalanceForm(forms.ModelForm):
 
 
 class TransactionForm(forms.ModelForm):
+    # TODO: only allow account currencies
+
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super(TransactionForm, self).__init__(*args, **kwargs)

@@ -21,7 +21,9 @@
         {% for category in object_list %}
         <tr>
             <td><a href="{% url 'balance:category_detail' category.pk %}">{{ category }}</a></td>
-            <td>{{ category.month_change|default:"-" }}</td>
+            <td>{% for amount in category.month_change.values %}
+                {{ amount }}
+            {% empty%}-{% endfor %}</td>
         </tr>
         {% endfor %}
         </tbody>
