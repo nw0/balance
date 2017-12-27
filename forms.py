@@ -1,3 +1,4 @@
+from datetime import date
 from django import forms
 
 from .models import Account, Transaction, TransactionCategory, AccountBalance
@@ -28,6 +29,7 @@ class TransactionForm(forms.ModelForm):
         self.fields['payee'].queryset = Account.objects.filter(owner=user)
         self.fields['payer'].queryset = Account.objects.filter(owner=user)
         self.fields['category'].queryset = TransactionCategory.objects.filter(owner=user)
+        self.fields['date'].initial = date.today()
 
     class Meta:
         model = Transaction
