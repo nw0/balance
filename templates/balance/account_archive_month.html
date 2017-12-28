@@ -6,7 +6,15 @@
 
 {% with account.last_balance as balance %}
 {% if balance %}
+
+{% with account.balance_estimate as estimate %}
+{% if balance.balance == account.balance_estimate %}
 <h2>{{ balance }} <small>on {{ balance.date }}</small></h2>
+{% else %}
+<h2>{{ estimate }} <small>(estimate)</small></h2>
+<p>Last verified: {{ balance }} on {{ balance.date }}</p>
+{% endif %}
+{% endwith %}
 
 {% with balance.difference as difference %}
 {% if difference %}
