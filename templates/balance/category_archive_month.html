@@ -3,9 +3,6 @@
 {% block content %}
 <h1>{{ category }}</h1>
 
-<h2>Transactions <small>{{ month|date:"N Y" }}</small></h2>
-<p><a href="{% url 'balance:category_month' category.pk previous_month.year previous_month.month %}">Previous</a>
-    <a href="{% url 'balance:category_month' category.pk next_month.year next_month.month %}">Next</a></p>
-{% include "balance/transaction_table.html" with transaction_list=object_list %}
+{% include "balance/transaction_archive.html" with transaction_list=object_list url_name='balance:category_month' object_key=category.pk %}
 
 {% endblock %}

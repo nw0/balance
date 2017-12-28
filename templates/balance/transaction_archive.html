@@ -1,0 +1,21 @@
+<h2>Transactions</h2>
+
+<nav>
+  <ul class="pagination">
+    <li class="page-item">
+      <a class="page-link" href="{% url url_name object_key previous_month.year previous_month.month %}" tabindex="-1">
+        {{ previous_month|date:"N" }}</a>
+    </li>
+    <li class="page-item active">
+      <span class="page-link">
+        {{ month|date:"N Y" }}
+      </span>
+    </li>
+    <li class="page-item">
+      <a class="page-link" href="{% url url_name object_key next_month.year next_month.month %}">
+        {{ next_month|date:"N" }}</a>
+    </li>
+  </ul>
+</nav>
+
+{% include "balance/transaction_table.html" %}
