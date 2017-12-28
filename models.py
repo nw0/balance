@@ -51,6 +51,25 @@ class AccountBalance(models.Model):
     balance = MoneyField(max_digits=16, decimal_places=2, default_currency="GBP")
     date = models.DateField()
 
+    @property
+    def last_transaction(self):
+        return self.account.related_transactions.filter(date__lte=self.date).order_by('-date').first()
+
+    @property
+    def previous_record(self):
+        return AccountBalance.objects.filter(account=self.account, date__lt=self.date).order_by('-date').first()
+
+    @property
+    def difference(self):
+        expected = None
+        if self.last_transaction is not None:
+            expected = self.account.balance_after(self.last_transaction)
+        elif self.previous_record is not None:
+            expected = self.previous_record.balance
+        if expected is not None:
+            return self.balance - expected
+        return None
+
     def __str__(self):
         return str(self.balance)
 

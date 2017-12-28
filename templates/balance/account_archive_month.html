@@ -7,6 +7,13 @@
 {% with account.last_balance as balance %}
 {% if balance %}
 <h2>{{ balance }} <small>on {{ balance.date }}</small></h2>
+
+{% with balance.difference as difference %}
+{% if difference %}
+<p>Discrepancy found: {{ difference }} from {{ balance.previous_record.date }}</p>
+{% endif %}
+{% endwith %}
+
 {% else %}
 <p>No balance records</p>
 {% endif %}

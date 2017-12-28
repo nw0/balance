@@ -11,7 +11,14 @@
         {% for account in account_list %}
         <tr>
             <td><a href="{% url 'balance:account_detail' account.pk %}">{{ account }}</a></td>
-            <td>{{ account.balance_estimate }}</td>
+            <td>
+                {{ account.balance_estimate }}
+                {% with account.last_balance.difference as difference %}
+                {% if difference %}
+                <span class="badge badge-danger">Discrepancies</span>
+                {% endif %}
+                {% endwith %}
+            </td>
         </tr>
         {% endfor %}
         </tbody>
