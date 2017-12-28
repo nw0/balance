@@ -153,3 +153,21 @@ class TransactionCreate(generic.edit.CreateView):
     def form_valid(self, form):
         form.instance.owner = self.request.user
         return super(TransactionCreate, self).form_valid(form)
+
+
+class TransactionUpdate(generic.edit.UpdateView):
+    model = Transaction
+    form_class = TransactionForm
+
+    def get_form_kwargs(self):
+        kwargs = super(TransactionUpdate, self).get_form_kwargs()
+
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super(TransactionUpdate, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('balance:transaction_detail', args=[self.object.pk])

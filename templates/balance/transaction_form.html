@@ -22,13 +22,17 @@ $(document).ready(function() {
 {% endblock scripts %}
 
 {% block content %}
+{% if form.instance.pk %}
+<h1>Update Transaction</h1>
+{% else %}
 <h1>New Transaction</h1>
+{% endif %}
 
-<form method="post" action="{% url 'balance:transaction_create' %}">
+<form method="post" action="">
     {% csrf_token %}
     {% bootstrap_form form %}
     {% buttons %}
-    <button type="submit" class="btn btn-primary">Create and add another</button>
+    <button type="submit" class="btn btn-primary">Save</button>
     {% endbuttons %}
 </form>
 {% endblock content %}

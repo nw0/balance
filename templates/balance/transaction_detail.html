@@ -2,7 +2,11 @@
 {% load bootstrap4 %}
 
 {% block content %}
-<h1>Transaction</h1>
+<h1>Transaction
+    <small>
+        <a class="btn btn-md btn-success" href="{% url 'balance:transaction_update' transaction.pk %}" role="button">Update</a>
+    </small>
+</h1>
 
 <h2>{{ transaction.date }}</h2>
 
