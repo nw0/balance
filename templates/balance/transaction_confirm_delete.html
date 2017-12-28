@@ -5,7 +5,6 @@
 <h1>Transaction
     <small>
         <a class="btn btn-md btn-success" href="{% url 'balance:transaction_update' transaction.pk %}" role="button">Update</a>
-        <a class="btn btn-md btn-danger" href="{% url 'balance:transaction_delete' transaction.pk %}" role="button">Delete</a>
     </small>
 </h1>
 
@@ -18,5 +17,13 @@
     <li>Amount: {{ transaction.amount }}</li>
     <li>Remark: {{ transaction.remark|default:"-" }}</li>
 </ul>
+
+<form method="post" action="">
+    {% csrf_token %}
+    <p>Are you sure you want to delete "{{ object }}"?</p>
+    {% buttons %}
+    <button type="submit" class="btn btn-danger">Delete</button>
+    {% endbuttons %}
+</form>
 
 {% endblock %}

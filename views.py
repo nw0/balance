@@ -178,3 +178,10 @@ class TransactionUpdate(generic.edit.UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('balance:transaction_detail', args=[self.object.pk])
+
+
+class TransactionDelete(generic.edit.DeleteView):
+    model = Transaction
+
+    def get_success_url(self):
+        return reverse_lazy('balance:category_month', args=[self.object.category.pk, self.object.date.year, self.object.date.month])
