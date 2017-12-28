@@ -25,7 +25,7 @@ class Account(models.Model):
 
     @property
     def recent_transactions(self):
-        return self.related_transactions.order_by("-date")
+        return self.related_transactions.order_by("-date", "-pk")
 
     @property
     def related_transactions(self):
@@ -53,7 +53,7 @@ class AccountBalance(models.Model):
 
     @property
     def last_transaction(self):
-        return self.account.related_transactions.filter(date__lte=self.date).order_by('-date').first()
+        return self.account.related_transactions.filter(date__lte=self.date).order_by('-date', '-pk').first()
 
     @property
     def previous_record(self):
