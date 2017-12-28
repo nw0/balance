@@ -31,6 +31,17 @@ class Account(models.Model):
     def related_transactions(self):
         return Transaction.objects.filter(Q(payee=self) | Q(payer=self))
 
+    def balance_after(self, transaction):
+        balance = AccountBalance.objects.filter(account=self, date__lt=transaction.date).order_by('-date').first()
+        if not balance:
+            return None
+
+        value = balance.balance
+        for t in self.related_transactions.filter(date__gt=balance.date, date__lte=transaction.date):
+            if t.date < transaction.date or t.pk <= transaction.pk:
+                value += t.net_amount(self)
+        return value
+
     def __str__(self):
         return self.name
 

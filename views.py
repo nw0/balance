@@ -45,12 +45,19 @@ class AccountMonth(generic.dates.MonthArchiveView):
         context['balance_form'] = BalanceForm(user=self.request.user, hide_account=True, initial={'account': self.account})
         context['account'] = self.account
         context['total'] = {}
-        for t in self.object_list:
+        balance = None
+        for t in reversed(self.object_list):
             change = t.net_amount(self.account)
             if change:
                 if change.currency not in context['total']:
                     context['total'][change.currency] = 0
                 context['total'][change.currency] += change
+
+            if balance is None:
+                balance = self.account.balance_after(t)
+            elif change:
+                balance += change
+            t.balance_after = balance
         return context
 
 

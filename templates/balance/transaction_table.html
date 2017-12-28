@@ -10,18 +10,17 @@
             <th>From</th>
             <th>To</th>
             <th>Amount</th>
+            {% if account %}<th>Balance</th>{% endif %}
             <th>Remark</th>
         </tr>
         </thead>
 
         <tbody>
-        {% if transaction_list %}
         <tr class="table-primary">
             <td colspan="4"><strong>Total</strong></td>
             <td><strong>{% for sum in total.values %}{{ sum }} {% empty %}-{% endfor %}</strong></td>
-            <td></td>
+            <td colspan="3"></td>
         </tr>
-        {% endif %}
         {% for transaction in transaction_list %}
         {% if transaction.internal and not account %}<tr class="text-muted">{% else %}<tr>{% endif %}
             <td><a href="{% url 'balance:transaction_detail' transaction.pk %}">{{ transaction.date }}</a></td>
@@ -30,6 +29,7 @@
             <td><a href="{% url 'balance:account_detail' transaction.payee.pk %}">{{ transaction.payee }}</a></td>
             {% if account %}
             <td>{{ transaction|net_amount:account }}</td>
+            <td>{{ transaction.balance_after|default:"-" }}</td>
             {% else %}
             <td>{{ transaction.internal_change }}</td>
             {% endif %}
