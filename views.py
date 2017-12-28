@@ -38,7 +38,7 @@ class AccountMonth(generic.dates.MonthArchiveView):
         return super(AccountMonth, self).dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        return Transaction.objects.filter(category__owner=self.request.user).filter(Q(payee=self.account) | Q(payer=self.account)).order_by('date')
+        return Transaction.objects.filter(category__owner=self.request.user).filter(Q(payee=self.account) | Q(payer=self.account)).order_by('-date', '-pk')
 
     def get_context_data(self, *args, **kwargs):
         context = super(AccountMonth, self).get_context_data(*args, **kwargs)
@@ -107,7 +107,7 @@ class CategoryMonth(generic.dates.MonthArchiveView):
         return super(CategoryMonth, self).dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        return Transaction.objects.filter(category__owner=self.request.user, category=self.category).order_by('date')
+        return Transaction.objects.filter(category__owner=self.request.user, category=self.category).order_by('-date', '-pk')
 
     def get_context_data(self, *args, **kwargs):
         context = super(CategoryMonth, self).get_context_data(*args, **kwargs)

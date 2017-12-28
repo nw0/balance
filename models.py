@@ -102,4 +102,4 @@ class Transaction(models.Model):
         return "%s (%s: %s)" % (self.amount, self.category, self.remark)
 
     class Meta:
-        get_latest_by = "date"
+        get_latest_by = ["date", "pk"]
