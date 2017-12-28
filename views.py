@@ -132,6 +132,13 @@ class CategoryCreate(generic.edit.CreateView):
         return super(CategoryCreate, self).form_valid(form)
 
 
+class TransactionDetail(generic.DetailView):
+    model = Transaction
+
+    def get_queryset(self):
+        return Transaction.objects.filter(category__owner=self.request.user)
+
+
 class TransactionCreate(generic.edit.CreateView):
     model = Transaction
     form_class = TransactionForm

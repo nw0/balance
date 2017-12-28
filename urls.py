@@ -13,5 +13,6 @@ urlpatterns = [
     path('category/<int:pk>/', views.category_redirect, name='category_detail'),
     path('category/<int:category_pk>/<int:year>/<int:month>/', views.CategoryMonth.as_view(month_format='%m'), name='category_month'),
     path('category/create/', views.CategoryCreate.as_view(), name='category_create'),
+    path('transaction/<int:pk>/', views.TransactionDetail.as_view(), name='transaction_detail'),
     path('transaction/create/', views.TransactionCreate.as_view(), name='transaction_create'),
 ]

@@ -24,7 +24,7 @@
         {% endif %}
         {% for transaction in transaction_list %}
         {% if transaction.internal and not account %}<tr class="text-muted">{% else %}<tr>{% endif %}
-            <td>{{ transaction.date }}</td>
+            <td><a href="{% url 'balance:transaction_detail' transaction.pk %}">{{ transaction.date }}</a></td>
             <td><a href="{% url 'balance:category_detail' transaction.category.pk %}">{{ transaction.category }}</a></td>
             <td><a href="{% url 'balance:account_detail' transaction.payer.pk %}">{{ transaction.payer }}</a></td>
             <td><a href="{% url 'balance:account_detail' transaction.payee.pk %}">{{ transaction.payee }}</a></td>
