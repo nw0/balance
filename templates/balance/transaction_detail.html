@@ -12,9 +12,9 @@
 <h2>{{ transaction.date }}</h2>
 
 <ul>
-    <li>From: <a href="{% url 'balance:account_detail' transaction.payer.pk %}">{{ transaction.payer }}</a></li>
+    <li>From: <a href="{% url 'balance:account_month' transaction.payer.pk transaction.date.year transaction.date.month %}">{{ transaction.payer }}</a></li>
     <li>To: <a href="{% url 'balance:account_detail' transaction.payee.pk %}">{{ transaction.payee }}</a></li>
-    <li>Category: <a href="{% url 'balance:category_detail' transaction.category.pk %}">{{ transaction.category }}</a></li>
+    <li>Category: <a href="{% url 'balance:category_month' transaction.category.pk transaction.date.year transaction.date.month %}">{{ transaction.category }}</a></li>
     <li>Amount: {{ transaction.amount }}</li>
     <li>Remark: {{ transaction.remark|default:"-" }}</li>
 </ul>
