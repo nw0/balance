@@ -2,7 +2,7 @@ from datetime import date
 from django import forms
 
 from .models import (Account, Transaction, TransactionCategory, AccountBalance,
-                     Budget)
+                     Budget, BudgetAllocation)
 
 
 class BalanceForm(forms.ModelForm):
@@ -47,3 +47,21 @@ class BudgetForm(forms.ModelForm):
     class Meta:
         model = Budget
         exclude = ['owner', 'categories']
+
+
+class AllocationForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        budget_pk = kwargs.pop('budget_pk', None)
+        budget = Budget.objects.get(pk=budget_pk)
+        user = kwargs.pop('user', None)
+        if user != budget.owner:
+            raise ValueError("Invalid budget")
+        super(AllocationForm, self).__init__(*args, **kwargs)
+
+        self.fields['category'].queryset = TransactionCategory.objects.filter(owner=user)
+        self.fields['budget'].queryset = Budget.objects.filter(owner=user)
+        self.fields['budget'].initial = budget
+
+    class Meta:
+        model = BudgetAllocation
+        exclude = []

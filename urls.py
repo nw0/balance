@@ -23,4 +23,6 @@ urlpatterns = [
     path('budget/', views.BudgetList.as_view(), name='budget_list'),
     path('budget/<int:pk>/', views.BudgetDetail.as_view(), name='budget_detail'),
     path('budget/create/', views.BudgetCreate.as_view(), name='budget_create'),
+
+    path('budget/<int:budget_pk>/allocate/', views.AllocationCreate.as_view(), name='allocation_create'),
 ]

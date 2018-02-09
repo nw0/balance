@@ -5,9 +5,9 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 
-from .forms import TransactionForm, BalanceForm, BudgetForm
+from .forms import TransactionForm, BalanceForm, BudgetForm, AllocationForm
 from .models import (Account, TransactionCategory, Transaction, AccountBalance,
-                     Budget)
+                     Budget, BudgetAllocation)
 
 
 class AccountList(generic.ListView):
@@ -211,3 +211,17 @@ class BudgetCreate(generic.edit.CreateView):
     def form_valid(self, form):
         form.instance.owner = self.request.user
         return super(BudgetCreate, self).form_valid(form)
+
+
+class AllocationCreate(generic.edit.CreateView):
+    model = BudgetAllocation
+    form_class = AllocationForm
+
+    def get_form_kwargs(self):
+        kwargs = super(AllocationCreate, self).get_form_kwargs()
+        kwargs['budget_pk'] = self.kwargs['budget_pk']
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def get_success_url(self):
+        return reverse_lazy('balance:budget_detail', args=[self.object.budget.pk])

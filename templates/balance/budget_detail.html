@@ -16,4 +16,14 @@
     {% endfor %}
 </ul>
 
+<h2>
+    Allocations
+    <a class="btn btn-md btn-success" href="{% url 'balance:allocation_create' budget.pk %}" role="button">Add</a>
+</h2>
+<ul>
+    {% for alloc in budget.budgetallocation_set.all %}
+    <li>{{ alloc }}</li>
+    {% endfor %}
+</ul>
+
 {% endblock %}
