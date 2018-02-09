@@ -133,3 +133,29 @@ class Transaction(models.Model):
 
     class Meta:
         get_latest_by = ["date", "pk"]
+
+
+class Budget(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=30)
+    accounts = models.ManyToManyField(Account)
+    remark = models.TextField()
+    date_start = models.DateField()
+    date_end = models.DateField()
+    categories = models.ManyToManyField(TransactionCategory, through="BudgetAllocation")
+
+    def __str__(self):
+        return self.name
+
+
+class BudgetAllocation(models.Model):
+    budget = models.ForeignKey(Budget,on_delete=models.CASCADE)
+    category = models.ForeignKey(TransactionCategory, on_delete=models.CASCADE)
+    amount = MoneyField(max_digits=16, decimal_places=2, default_currency="GBP")
+
+    @property
+    def owner(self):
+        return self.budget.owner
+
+    def __str__(self):
+        return "%s (%s)" % (self.category, self.amount)
