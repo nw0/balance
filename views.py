@@ -193,6 +193,11 @@ class BudgetList(generic.ListView):
         return Budget.objects.filter(owner=self.request.user)
 
 
+class BudgetDetail(generic.DetailView):
+    def get_queryset(self):
+        return Budget.objects.filter(owner=self.request.user)
+
+
 class BudgetCreate(generic.edit.CreateView):
     model = Budget
     form_class = BudgetForm

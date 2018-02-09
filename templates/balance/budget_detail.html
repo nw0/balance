@@ -1,0 +1,19 @@
+{% extends "balance/base.html" %}
+{% load bootstrap4 %}
+
+{% block title %}: {{ budget }}{% endblock %}}
+
+{% block content %}
+<h1>{{ budget }}
+<small>{{ budget.date_start }} to {{ budget.date_end }}</small></h1>
+
+<p>{{ budget.remark }}</p>
+
+<h2>Accounts</h2>
+<ul>
+    {% for account in budget.accounts.all %}
+    <li>{{ account }}</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
