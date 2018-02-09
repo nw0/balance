@@ -9,21 +9,34 @@
 
 <p>{{ budget.remark }}</p>
 
-<h2>Accounts</h2>
-<ul>
-    {% for account in budget.accounts.all %}
-    <li>{{ account }}</li>
-    {% endfor %}
-</ul>
-
 <h2>
     Allocations
     <a class="btn btn-md btn-success" href="{% url 'balance:allocation_create' budget.pk %}" role="button">Add</a>
 </h2>
-<ul>
-    {% for alloc in budget.budgetallocation_set.all %}
-    <li>{{ alloc }}</li>
-    {% endfor %}
-</ul>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Category</th>
+            <th>Budget</th>
+            <th>Expenditure</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for category, currencies in budget.categorise.items %}
+        {% for d in currencies.values %}
+        <tr>
+            <td>{{ category }}</td>
+            <td>{{ d.1 }}</td>
+            <td>{{ d.0 }}</td>
+        </tr>
+        {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
 
 {% endblock %}

@@ -1,7 +1,7 @@
 from datetime import date
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, Sum
 from djmoney.models.fields import MoneyField
 
 
@@ -30,6 +30,17 @@ class Account(models.Model):
     @property
     def related_transactions(self):
         return Transaction.objects.filter(Q(payee=self) | Q(payer=self))
+
+    def transactions_between(self, date_start, date_end):
+        """Transactions t: `date_bef` <= t.date < `date_end`"""
+        return self.related_transactions.filter(date__range=(date_start, date_end))
+
+    def categorise(self, date_start, date_end):
+        categories = {}
+        for t in self.transactions_between(date_start, date_end):
+            categories.setdefault(t.category, 0)
+            categories[t.category] += t.net_amount(self)
+        return categories
 
     def balance_after(self, transaction):
         balance = AccountBalance.objects.filter(account=self, date__lt=transaction.date).order_by('-date').first()
@@ -114,10 +125,12 @@ class Transaction(models.Model):
 
     @property
     def internal_change(self):
+        # neg if paid someone else, pos oth: see category Internal
         return self.amount * (-1 if self.payer.owned and not self.payee.owned else 1)
 
     @property
     def net_change(self):
+        # Paid someone else or vice-versa
         if self.payer.owned and not self.payee.owned:
             return -1 * self.amount
         elif not self.payer.owned and self.payee.owned:
@@ -126,6 +139,7 @@ class Transaction(models.Model):
             return 0
 
     def net_amount(self, account):
+        # Flows from an account
         return self.amount * (-1 if account == self.payer else 1)
 
     def __str__(self):
@@ -136,6 +150,9 @@ class Transaction(models.Model):
 
 
 class Budget(models.Model):
+    EXPENDITURE = 0
+    ALLOCATION = 1
+
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=30)
     accounts = models.ManyToManyField(Account)
@@ -143,6 +160,22 @@ class Budget(models.Model):
     date_start = models.DateField()
     date_end = models.DateField()
     categories = models.ManyToManyField(TransactionCategory, through="BudgetAllocation")
+
+    def categorise(self):
+        categories = {}
+        # {Category: {Currency: {EXP: 3, ALLOC: 5}}
+
+        for account in self.accounts.all():
+            for c, s in account.categorise(self.date_start, self.date_end).items():
+                currency = categories.setdefault(c, {}).setdefault(s.currency, {})
+                currency.setdefault(Budget.EXPENDITURE, 0)
+                currency[Budget.EXPENDITURE] += s
+
+        for alloc in self.budgetallocation_set.all():
+            currency = categories.setdefault(alloc.category, {}).setdefault(alloc.amount.currency, {})
+            currency.setdefault(Budget.ALLOCATION, 0)
+            currency[Budget.ALLOCATION] += alloc.amount
+        return categories
 
     def __str__(self):
         return self.name
