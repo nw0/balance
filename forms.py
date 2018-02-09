@@ -1,7 +1,8 @@
 from datetime import date
 from django import forms
 
-from .models import Account, Transaction, TransactionCategory, AccountBalance
+from .models import (Account, Transaction, TransactionCategory, AccountBalance,
+                     Budget)
 
 
 class BalanceForm(forms.ModelForm):
@@ -34,3 +35,15 @@ class TransactionForm(forms.ModelForm):
     class Meta:
         model = Transaction
         exclude = ['owner']
+
+
+class BudgetForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(BudgetForm, self).__init__(*args, **kwargs)
+
+        self.fields['accounts'].queryset = Account.objects.filter(owner=user,owned=True)
+
+    class Meta:
+        model = Budget
+        exclude = ['owner', 'categories']

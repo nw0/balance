@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 
-from .forms import TransactionForm, BalanceForm
+from .forms import TransactionForm, BalanceForm, BudgetForm
 from .models import (Account, TransactionCategory, Transaction, AccountBalance,
                      Budget)
 
@@ -191,3 +191,18 @@ class TransactionDelete(generic.edit.DeleteView):
 class BudgetList(generic.ListView):
     def get_queryset(self):
         return Budget.objects.filter(owner=self.request.user)
+
+
+class BudgetCreate(generic.edit.CreateView):
+    model = Budget
+    form_class = BudgetForm
+    success_url = reverse_lazy('balance:budget_list')
+
+    def get_form_kwargs(self):
+        kwargs = super(BudgetCreate, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super(BudgetCreate, self).form_valid(form)

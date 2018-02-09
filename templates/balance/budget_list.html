@@ -4,6 +4,9 @@
 
 {% block content %}
 <h1>Your budgets
+    <small>
+        <a class="btn btn-md btn-success" href="{% url 'balance:budget_create' %}" role="button">Add</a>
+    </small>
 </h1>
 
 <ul>
