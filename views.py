@@ -6,7 +6,8 @@ from django.urls import reverse_lazy, reverse
 from django.views import generic
 
 from .forms import TransactionForm, BalanceForm
-from .models import Account, TransactionCategory, Transaction, AccountBalance
+from .models import (Account, TransactionCategory, Transaction, AccountBalance,
+                     Budget)
 
 
 class AccountList(generic.ListView):
@@ -185,3 +186,8 @@ class TransactionDelete(generic.edit.DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('balance:category_month', args=[self.object.category.pk, self.object.date.year, self.object.date.month])
+
+
+class BudgetList(generic.ListView):
+    def get_queryset(self):
+        return Budget.objects.filter(owner=self.request.user)

@@ -9,6 +9,9 @@
                 <a class="nav-link {% nav_active request 'balance:category_list' %}" href="{% url 'balance:category_list' %}">Categories</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link {% nav_active request 'balance:budget_list' %}" href="{% url 'balance:budget_list' %}">Budgets</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link {% nav_active request 'balance:transaction_create' %}" href="{% url 'balance:transaction_create' %}">New Transaction</a>
             </li>
         </ul>
