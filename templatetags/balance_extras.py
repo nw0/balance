@@ -1,6 +1,8 @@
 from django import template
 from django.urls import reverse
 
+from ..models import Account, Budget
+
 register = template.Library()
 
 
@@ -12,6 +14,11 @@ def other_account(transaction, account):
 @register.filter()
 def net_amount(transaction, account):
     return transaction.net_amount(account)
+
+
+@register.filter()
+def discrepancies(account: Account, budget: Budget):
+    return sum ((s for b, s in account.find_discrepancies(budget.date_start, budget.date_end)))
 
 
 @register.simple_tag

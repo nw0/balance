@@ -11,8 +11,12 @@ class Account(models.Model):
     owned = models.BooleanField(default=True)
 
     @property
+    def related_balances(self):
+        return AccountBalance.objects.filter(account=self)
+
+    @property
     def last_balance(self):
-        return AccountBalance.objects.filter(account=self).latest()
+        return self.related_balances.latest()
 
     @property
     def balance_estimate(self):
@@ -52,6 +56,10 @@ class Account(models.Model):
             if t.date < transaction.date or t.pk <= transaction.pk:
                 value += t.net_amount(self)
         return value
+
+    def find_discrepancies(self, date_start, date_end):
+        balances = self.related_balances.filter(date__range=(date_start, date_end))
+        return [(b,d) for (b, d) in ((b, b.difference) for b in balances) if d]
 
     def __str__(self):
         return self.name
