@@ -9,6 +9,10 @@
 
 <p>{{ budget.remark }}</p>
 
+{% with budget.categorise as lines %}
+{% with lines.0 as categorised %}
+{% with lines.1 as totals %}
+
 <h2>
     Allocations
     <a class="btn btn-md btn-success" href="{% url 'balance:allocation_create' budget.pk %}" role="button">Add</a>
@@ -25,7 +29,7 @@
         </thead>
 
         <tbody>
-        {% for category, currencies in budget.categorise.items %}
+        {% for category, currencies in categorised.items %}
         {% for d in currencies.values %}
         <tr>
             <td>{{ category }}</td>
@@ -34,9 +38,18 @@
         </tr>
         {% endfor %}
         {% endfor %}
+        {% for currency, sums in totals.items %}
+        <tr>
+            <td>Total</td>
+            <td>{{ sums.1 }}</td>
+            <td>{{ sums.0 }}</td>
+        </tr>
+        {% endfor %}
         </tbody>
     </table>
 </div>
 
-
+{% endwith %}
+{% endwith %}
+{% endwith %}
 {% endblock %}

@@ -162,7 +162,7 @@ class Budget(models.Model):
     categories = models.ManyToManyField(TransactionCategory, through="BudgetAllocation")
 
     def categorise(self):
-        categories = {}
+        categories, totals = {}, {}
         # {Category: {Currency: {EXP: 3, ALLOC: 5}}
 
         for account in self.accounts.all():
@@ -170,12 +170,18 @@ class Budget(models.Model):
                 currency = categories.setdefault(c, {}).setdefault(s.currency, {})
                 currency.setdefault(Budget.EXPENDITURE, 0)
                 currency[Budget.EXPENDITURE] += s
+                currency = totals.setdefault(s.currency, {})
+                currency.setdefault(Budget.EXPENDITURE, 0)
+                currency[Budget.EXPENDITURE] += s
 
         for alloc in self.budgetallocation_set.all():
             currency = categories.setdefault(alloc.category, {}).setdefault(alloc.amount.currency, {})
             currency.setdefault(Budget.ALLOCATION, 0)
             currency[Budget.ALLOCATION] += alloc.amount
-        return categories
+            currency = totals.setdefault(alloc.amount.currency, {})
+            currency.setdefault(Budget.ALLOCATION, 0)
+            currency[Budget.ALLOCATION] += alloc.amount
+        return categories, totals
 
     def __str__(self):
         return self.name
